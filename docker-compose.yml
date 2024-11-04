@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  app:
+    build: 
+      context: docker/app
+      dockerfile: Dockerfile
+    container_name: live-testing-1
+    ports:
+      -"8000:80"
+    volumes:
+      -.:/var/www/html
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    depends_on:
+      - serviceName
+  db:
+    build: 
+      context: docker/db
+      dockerfile: Dockerfile
