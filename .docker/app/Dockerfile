@@ -4,8 +4,7 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
 
 RUN apt-get update && apt-get install -y \
     libpng-dev \
@@ -27,5 +26,5 @@ COPY .docker/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.con
 RUN composer install --no-dev --optimize-autoloader
 
 EXPOSE 9000
-
+USER www-data
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
