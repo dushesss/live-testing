@@ -1,10 +1,8 @@
 FROM php:8.3-fpm
 
-WORKDIR /var/www/html
+WORKDIR /var/www/html/backend
 
 COPY . /var/www/html
-
-
 
 RUN apt-get update && apt-get install -y \
     libpng-dev \
@@ -23,7 +21,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY .docker/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN composer install --no-dev --optimize-autoloader
+RUN cd backend && composer install --no-dev --optimize-autoloader
+
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 9000
 USER www-data
