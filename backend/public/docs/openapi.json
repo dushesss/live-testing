@@ -1,0 +1,125 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Live Testing API",
+        "description": "Документация API проекта",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/",
+            "description": "Локальный сервер API"
+        }
+    ],
+    "paths": {
+        "/register": {
+            "post": {
+                "summary": "Регистрация нового пользователя",
+                "operationId": "de5f370bcf49cd384346e56f3d5cd3e6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "login",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "login": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Пользователь зарегистрирован"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Авторизация пользователя и получение токена",
+                "operationId": "af7565b1bec9f600265957f8292cb733",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "login",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "login": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная авторизация и выдача токена"
+                    },
+                    "422": {
+                        "description": "Неверный логин или пароль"
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "summary": "Получение текущего пользователя",
+                "operationId": "9dd9d66b37aa1432e1ba5e5996611ab0",
+                "responses": {
+                    "200": {
+                        "description": "Успешно"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/logout": {
+            "post": {
+                "summary": "Выход пользователя и удаление токена",
+                "operationId": "10f9f65c30a5bab554eb17fb456fb678",
+                "responses": {
+                    "200": {
+                        "description": "Успешный выход"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    }
+}
