@@ -14,17 +14,15 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->enum('role', ['super_admin', 'teacher', 'student'])
-                ->default('student')
-                ->after('email_verified_at')
-                ->comment('Роль пользователя в системе: суперпользователь, преподаватель или студент');
-
             $table->string('login')
                 ->unique()
-                ->after('name')
                 ->comment('Логин для входа в систему');
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->enum('role', ['super_admin', 'teacher', 'student'])
+                ->default('student')
+                ->comment('Роль пользователя в системе: суперпользователь, преподаватель или студент');
+
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

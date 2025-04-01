@@ -38,7 +38,7 @@ class AuthController extends Controller
 
         $tokenData = $authService->login($credentials);
 
-        if (! $tokenData) {
+        if (!$tokenData) {
             return $this->apiResponse(422, 'error', 'Неверный логин или пароль');
         }
 

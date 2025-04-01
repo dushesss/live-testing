@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('slug')->comment('ЧПУ теста');
             $table->text('description')->comment('Описание теста');
             $table->boolean('active')->comment('Активность теста');
-            $table->foreignId('teacher_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('teacher_id')->constrained('users')->cascadeOnDelete();
             $table->boolean('is_published')->default(false);
             $table->timestamps();
             $table->softDeletes();
