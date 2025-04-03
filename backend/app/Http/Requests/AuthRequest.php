@@ -11,7 +11,7 @@ class AuthRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,11 +21,17 @@ class AuthRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name'     => 'required|string|max:255',
-            'login'    => 'required|string|max:255|unique:users',
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ];
+        return match ($this->route()->uri()) {
+            'api/login' => [
+                'login' => ['required', 'string'],
+                'password' => ['required', 'string'],
+            ],
+            default => [
+                'name' => ['required', 'string'],
+                'login' => ['required', 'string', 'unique:users'],
+                'email' => ['required', 'email', 'unique:users'],
+                'password' => ['required', 'string'],
+            ]
+        };
     }
 }
