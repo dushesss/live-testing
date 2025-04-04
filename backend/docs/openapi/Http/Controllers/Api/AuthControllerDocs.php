@@ -7,6 +7,7 @@ use OpenApi\Attributes as OA;
 
 final class AuthControllerDocs
 {
+    #[OA\Tag(name: 'Auth', description: 'Методы для авторизации')]
     #[OA\Post(
         path: '/register',
         summary: 'Регистрация нового пользователя',
@@ -22,6 +23,7 @@ final class AuthControllerDocs
                 ]
             )
         ),
+        tags: ['Auth'],
         responses: [
             new OA\Response(response: 201, description: 'Пользователь зарегистрирован'),
         ]
@@ -40,6 +42,7 @@ final class AuthControllerDocs
                 ]
             )
         ),
+        tags: ['Auth'],
         responses: [
             new OA\Response(response: 200, description: 'Успешная авторизация и выдача токена'),
             new OA\Response(response: 422, description: 'Неверный логин или пароль'),
@@ -50,6 +53,7 @@ final class AuthControllerDocs
         path: '/user',
         summary: 'Получение текущего пользователя',
         security: [ ['bearerAuth' => []] ],
+        tags: ['Auth'],
         responses: [
             new OA\Response(
                 response: 200,
@@ -61,7 +65,8 @@ final class AuthControllerDocs
     #[OA\Post(
         path: '/logout',
         summary: 'Выход пользователя и удаление токена',
-        security: [['sanctum' => []]],
+        security: [['bearerAuth' => []]],
+        tags: ['Auth'],
         responses: [
             new OA\Response(response: 200, description: 'Успешный выход'),
         ]

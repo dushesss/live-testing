@@ -7,13 +7,16 @@
     },
     "servers": [
         {
-            "url": "/",
+            "url": "http://live-testing.loc/api",
             "description": "Локальный сервер API"
         }
     ],
     "paths": {
         "/register": {
             "post": {
+                "tags": [
+                    "Auth"
+                ],
                 "summary": "Регистрация нового пользователя",
                 "operationId": "de5f370bcf49cd384346e56f3d5cd3e6",
                 "requestBody": {
@@ -55,6 +58,9 @@
         },
         "/login": {
             "post": {
+                "tags": [
+                    "Auth"
+                ],
                 "summary": "Авторизация пользователя и получение токена",
                 "operationId": "af7565b1bec9f600265957f8292cb733",
                 "requestBody": {
@@ -91,6 +97,9 @@
         },
         "/user": {
             "get": {
+                "tags": [
+                    "Auth"
+                ],
                 "summary": "Получение текущего пользователя",
                 "operationId": "9dd9d66b37aa1432e1ba5e5996611ab0",
                 "responses": {
@@ -107,6 +116,9 @@
         },
         "/logout": {
             "post": {
+                "tags": [
+                    "Auth"
+                ],
                 "summary": "Выход пользователя и удаление токена",
                 "operationId": "10f9f65c30a5bab554eb17fb456fb678",
                 "responses": {
@@ -116,10 +128,220 @@
                 },
                 "security": [
                     {
-                        "sanctum": []
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/live-tests": {
+            "get": {
+                "tags": [
+                    "Live Tests"
+                ],
+                "summary": "Получить список всех тестов",
+                "operationId": "b6cca75c67ea193338f3e729aef654ef",
+                "responses": {
+                    "200": {
+                        "description": "Список тестов"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Live Tests"
+                ],
+                "summary": "Создать новый тест",
+                "operationId": "75149c16df2c7a6d43168ceb090f01a5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "slug",
+                                    "active"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "slug": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "active": {
+                                        "type": "boolean"
+                                    },
+                                    "is_published": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Тест успешно создан"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/live-tests/{id}": {
+            "get": {
+                "tags": [
+                    "Live Tests"
+                ],
+                "summary": "Получить конкретный тест",
+                "operationId": "46f190fa30a1243a1817cb0dad9f8fe0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о тесте"
+                    },
+                    "403": {
+                        "description": "Доступ запрещён"
+                    },
+                    "404": {
+                        "description": "Тест не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Live Tests"
+                ],
+                "summary": "Обновить тест",
+                "operationId": "c7bd8f4a384503527dcaf787e8680d13",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "slug": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "active": {
+                                        "type": "boolean"
+                                    },
+                                    "is_published": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Тест обновлён"
+                    },
+                    "403": {
+                        "description": "Доступ запрещён"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Live Tests"
+                ],
+                "summary": "Удалить тест",
+                "operationId": "ab8e74b318c82ced13d5e1590090e1e7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Тест удалён"
+                    },
+                    "403": {
+                        "description": "Доступ запрещён"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
                     }
                 ]
             }
         }
-    }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "JWT токен авторизации. Получается через /login",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Методы для авторизации"
+        },
+        {
+            "name": "Live Tests",
+            "description": "CRUD операции с тестами"
+        }
+    ]
 }

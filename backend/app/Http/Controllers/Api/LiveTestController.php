@@ -1,50 +1,51 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LiveTestRequest;
 use App\Models\LiveTest;
-use Illuminate\Http\Request;
+use App\Services\LiveTestService;
+use Illuminate\Http\JsonResponse;
 
 class LiveTestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(
+        private readonly LiveTestService $service
+    ) {}
+
+    public function index(): JsonResponse
     {
-        //
+        $tests = $this->service->all();
+        return $this->apiResponse(200, 'success', $tests);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(LiveTestRequest $request): JsonResponse
     {
-        //
+        $test = $this->service->create($request->validated(), auth()->id());
+        return $this->apiResponse(201, 'success', $test);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(LiveTest $liveTest)
+    public function show(LiveTest $liveTest): JsonResponse
     {
-        //
+        $this->authorize('view', $liveTest);
+        return $this->apiResponse(200, 'success', $liveTest);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, LiveTest $liveTest)
+    public function update(LiveTestRequest $request, LiveTest $liveTest): JsonResponse
     {
         $this->authorize('update', $liveTest);
+
+        $updated = $this->service->update($liveTest, $request->validated());
+        return $this->apiResponse(200, 'success', $updated);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(LiveTest $liveTest)
+    public function destroy(LiveTest $liveTest): JsonResponse
     {
-        //
+        $this->authorize('delete', $liveTest);
+
+        $this->service->delete($liveTest);
+        return $this->apiResponse(200, 'success', ['message' => 'Удалено']);
     }
 }
