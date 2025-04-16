@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\LiveTest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
 /**
  * Сервис управления живыми тестами.
@@ -56,6 +57,7 @@ class LiveTestService
     public function create(array $data, int $userId): LiveTest
     {
         $data['user_id'] = $userId;
+        $data['slug'] = $this->generateSlug($data['name']);
 
         return LiveTest::create($data);
     }
@@ -81,5 +83,15 @@ class LiveTestService
     public function delete(LiveTest $test): void
     {
         $test->delete();
+    }
+
+    private function generateSlug(string $name): string
+    {
+        $baseSlug = Str::slug($name);
+        $slug = $baseSlug;
+        $i = 1;
+        $slug = $baseSlug . '-' . LiveTest::max('id') + $i;
+
+        return $slug;
     }
 }
