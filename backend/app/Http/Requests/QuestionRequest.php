@@ -6,9 +6,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Запрос на создание, обновление и фильтрацию живых тестов.
+ * Запрос на создание, обновление и фильтрацию вопросов.
  */
-class LiveTestRequest extends FormRequest
+class QuestionRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,9 +18,9 @@ class LiveTestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'is_active' => ['nullable', 'boolean'],
+            'text' => ['required', 'string', 'max:1000'],
+            'test_id' => ['required', 'integer', 'exists:live_tests,id'],
+            'order' => ['nullable', 'integer', 'min:1'],
         ];
     }
 

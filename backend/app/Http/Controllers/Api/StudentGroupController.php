@@ -1,50 +1,101 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StudentGroupRequest;
 use App\Models\StudentGroup;
+use App\Services\StudentGroupService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
+/**
+ * Контроллер управления студенческими группами.
+ */
 class StudentGroupController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function __construct(
+        private readonly StudentGroupService $service
+    ) {
+        $this->authorizeResource(StudentGroup::class, 'student_group');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Получить список студенческих групп (с фильтрацией по названию).
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        //
+        try {
+            $groups = $this->service->all($request->get('name'));
+            return $this->apiResponse(Response::HTTP_OK, 'success', $groups);
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Создать новую студенческую группу.
+     *
+     * @param StudentGroupRequest $request
+     * @return JsonResponse
      */
-    public function show(StudentGroup $studentGroup)
+    public function store(StudentGroupRequest $request): JsonResponse
     {
-        //
+        try {
+            $group = $this->service->create($request->validated());
+            return $this->apiResponse(Response::HTTP_CREATED, 'success', $group);
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Получить конкретную студенческую группу.
+     *
+     * @param StudentGroup $studentGroup
+     * @return JsonResponse
      */
-    public function update(Request $request, StudentGroup $studentGroup)
+    public function show(StudentGroup $studentGroup): JsonResponse
     {
-        //
+        return $this->apiResponse(Response::HTTP_OK, 'success', $studentGroup);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Обновить студенческую группу.
+     *
+     * @param StudentGroupRequest $request
+     * @param StudentGroup $studentGroup
+     * @return JsonResponse
      */
-    public function destroy(StudentGroup $studentGroup)
+    public function update(StudentGroupRequest $request, StudentGroup $studentGroup): JsonResponse
     {
-        //
+        try {
+            $updated = $this->service->update($studentGroup, $request->validated());
+            return $this->apiResponse(Response::HTTP_OK, 'success', $updated);
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Удалить студенческую группу.
+     *
+     * @param StudentGroup $studentGroup
+     * @return JsonResponse
+     */
+    public function destroy(StudentGroup $studentGroup): JsonResponse
+    {
+        try {
+            $this->service->delete($studentGroup);
+            return $this->apiResponse(Response::HTTP_NO_CONTENT, 'success');
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
     }
 }

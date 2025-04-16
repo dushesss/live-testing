@@ -1,50 +1,101 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TestAttemptRequest;
 use App\Models\TestAttempt;
+use App\Services\TestAttemptService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
+/**
+ * Контроллер управления попытками прохождения тестов.
+ */
 class TestAttemptController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function __construct(
+        private readonly TestAttemptService $service
+    ) {
+        $this->authorizeResource(TestAttempt::class, 'test_attempt');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Получить список попыток (с фильтрацией по студенту или тесту).
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        //
+        try {
+            $attempts = $this->service->all($request->get('student_id'), $request->get('live_test_id'));
+            return $this->apiResponse(Response::HTTP_OK, 'success', $attempts);
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Создать новую попытку.
+     *
+     * @param TestAttemptRequest $request
+     * @return JsonResponse
      */
-    public function show(TestAttempt $testAttempt)
+    public function store(TestAttemptRequest $request): JsonResponse
     {
-        //
+        try {
+            $attempt = $this->service->create($request->validated());
+            return $this->apiResponse(Response::HTTP_CREATED, 'success', $attempt);
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Получить конкретную попытку.
+     *
+     * @param TestAttempt $testAttempt
+     * @return JsonResponse
      */
-    public function update(Request $request, TestAttempt $testAttempt)
+    public function show(TestAttempt $testAttempt): JsonResponse
     {
-        //
+        return $this->apiResponse(Response::HTTP_OK, 'success', $testAttempt);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Обновить попытку.
+     *
+     * @param TestAttemptRequest $request
+     * @param TestAttempt $testAttempt
+     * @return JsonResponse
      */
-    public function destroy(TestAttempt $testAttempt)
+    public function update(TestAttemptRequest $request, TestAttempt $testAttempt): JsonResponse
     {
-        //
+        try {
+            $updated = $this->service->update($testAttempt, $request->validated());
+            return $this->apiResponse(Response::HTTP_OK, 'success', $updated);
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Удалить попытку.
+     *
+     * @param TestAttempt $testAttempt
+     * @return JsonResponse
+     */
+    public function destroy(TestAttempt $testAttempt): JsonResponse
+    {
+        try {
+            $this->service->delete($testAttempt);
+            return $this->apiResponse(Response::HTTP_NO_CONTENT, 'success');
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
     }
 }

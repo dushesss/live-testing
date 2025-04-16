@@ -12,6 +12,194 @@
         }
     ],
     "paths": {
+        "/answers": {
+            "get": {
+                "tags": [
+                    "Answers"
+                ],
+                "summary": "Получить список всех ответов",
+                "operationId": "166c023c863f9bcf488bdf7d4ef80467",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Поиск по тексту ответа",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список ответов"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Answers"
+                ],
+                "summary": "Создать новый ответ",
+                "operationId": "46c1f7f6a3baaa16a6a997edb4b24d86",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "text",
+                                    "question_id",
+                                    "is_correct"
+                                ],
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Париж"
+                                    },
+                                    "question_id": {
+                                        "type": "integer",
+                                        "example": 42
+                                    },
+                                    "is_correct": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ответ успешно создан"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/answers/{id}": {
+            "get": {
+                "tags": [
+                    "Answers"
+                ],
+                "summary": "Получить конкретный ответ",
+                "operationId": "e63021004de1209309037b6688303219",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация об ответе"
+                    },
+                    "404": {
+                        "description": "Ответ не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Answers"
+                ],
+                "summary": "Обновить ответ",
+                "operationId": "423b416182b2db8fa0b733c04b34c3eb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Лондон"
+                                    },
+                                    "is_correct": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ответ обновлён"
+                    },
+                    "404": {
+                        "description": "Ответ не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Answers"
+                ],
+                "summary": "Удалить ответ",
+                "operationId": "b26800befecf63bd2a78de48a1a484fb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ответ удалён"
+                    },
+                    "404": {
+                        "description": "Ответ не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/register": {
             "post": {
                 "tags": [
@@ -124,6 +312,378 @@
                 "responses": {
                     "200": {
                         "description": "Успешный выход"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/faculties": {
+            "get": {
+                "tags": [
+                    "Faculties"
+                ],
+                "summary": "Получить список всех факультетов",
+                "operationId": "da1ef37aef3b7487bf60b1c9aefc56ab",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Фильтрация по названию",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список факультетов"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Faculties"
+                ],
+                "summary": "Создать новый факультет",
+                "operationId": "a459c0dd813581e0d93df12ea0fa06a9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "institute_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Факультет прикладной математики"
+                                    },
+                                    "institute_id": {
+                                        "type": "integer",
+                                        "example": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Факультет создан"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/faculties/{id}": {
+            "get": {
+                "tags": [
+                    "Faculties"
+                ],
+                "summary": "Получить конкретный факультет",
+                "operationId": "b890f8865e63897fb955666e8508c288",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID факультета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о факультете"
+                    },
+                    "404": {
+                        "description": "Факультет не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Faculties"
+                ],
+                "summary": "Обновить факультет",
+                "operationId": "0379e6d5babe7ad0cb954b27859a28f4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID факультета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Факультет компьютерных наук"
+                                    },
+                                    "institute_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Факультет обновлён"
+                    },
+                    "404": {
+                        "description": "Факультет не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Faculties"
+                ],
+                "summary": "Удалить факультет",
+                "operationId": "d3c7cb6e0412b06238b47fc01eb226d6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID факультета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Факультет удалён"
+                    },
+                    "404": {
+                        "description": "Факультет не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/institutes": {
+            "get": {
+                "tags": [
+                    "Institutes"
+                ],
+                "summary": "Получить список всех институтов",
+                "operationId": "eb82314b039cc0c0ccf1c90bcde8e686",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Фильтрация по названию",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список институтов"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Institutes"
+                ],
+                "summary": "Создать новый институт",
+                "operationId": "25b9ea5d479dfbbfb481bb9d5211f4ba",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "university_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Институт робототехники"
+                                    },
+                                    "university_id": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Институт создан"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/institutes/{id}": {
+            "get": {
+                "tags": [
+                    "Institutes"
+                ],
+                "summary": "Получить конкретный институт",
+                "operationId": "81b5267cad6d660accd341917f60f71e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID института",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация об институте"
+                    },
+                    "404": {
+                        "description": "Институт не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Institutes"
+                ],
+                "summary": "Обновить институт",
+                "operationId": "dd69ee00440866082dc7b9372540283b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID института",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Институт ИИ и данных"
+                                    },
+                                    "university_id": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Институт обновлён"
+                    },
+                    "404": {
+                        "description": "Институт не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Institutes"
+                ],
+                "summary": "Удалить институт",
+                "operationId": "6bbd78123d422a843a2cd5ac1db6edd0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID института",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Институт удалён"
+                    },
+                    "404": {
+                        "description": "Институт не найден"
                     }
                 },
                 "security": [
@@ -322,6 +882,1198 @@
                     }
                 ]
             }
+        },
+        "/questions": {
+            "get": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Получить список всех вопросов",
+                "operationId": "1573cf09d7ec623bf97d76d8c3b07d4e",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "query",
+                        "description": "Фильтрация по тексту вопроса",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список вопросов"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Создать новый вопрос",
+                "operationId": "7f169a1a79305b1f2dae4f3f6c717c1d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "text",
+                                    "live_test_id"
+                                ],
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Какой город является столицей Франции?"
+                                    },
+                                    "live_test_id": {
+                                        "type": "integer",
+                                        "example": 12
+                                    },
+                                    "order": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "single"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Вопрос успешно создан"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/questions/{id}": {
+            "get": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Получить конкретный вопрос",
+                "operationId": "8ee70375342554421cfd71d6a231f0e1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID вопроса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о вопросе"
+                    },
+                    "404": {
+                        "description": "Вопрос не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Обновить вопрос",
+                "operationId": "5e2d23d95dd21ededa6c830be31e6f68",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID вопроса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Какой город является столицей Италии?"
+                                    },
+                                    "order": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "multiple"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Вопрос обновлён"
+                    },
+                    "404": {
+                        "description": "Вопрос не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Questions"
+                ],
+                "summary": "Удалить вопрос",
+                "operationId": "102355d61944bc69714b1b17db61b21b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID вопроса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Вопрос удалён"
+                    },
+                    "404": {
+                        "description": "Вопрос не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/student-answers": {
+            "get": {
+                "tags": [
+                    "Student Answers"
+                ],
+                "summary": "Получить список всех ответов студентов",
+                "operationId": "02cbdfa4acfee155c8df9a4d6c862f36",
+                "parameters": [
+                    {
+                        "name": "question_id",
+                        "in": "query",
+                        "description": "Фильтрация по ID вопроса",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "student_id",
+                        "in": "query",
+                        "description": "Фильтрация по ID студента",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список ответов студентов"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Student Answers"
+                ],
+                "summary": "Создать ответ студента",
+                "operationId": "f139ea5123706fa9b478ce6f478d9584",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "student_id",
+                                    "answer_id",
+                                    "question_id"
+                                ],
+                                "properties": {
+                                    "student_id": {
+                                        "type": "integer",
+                                        "example": 14
+                                    },
+                                    "answer_id": {
+                                        "type": "integer",
+                                        "example": 87
+                                    },
+                                    "question_id": {
+                                        "type": "integer",
+                                        "example": 12
+                                    },
+                                    "is_selected": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ответ студента сохранён"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/student-answers/{id}": {
+            "get": {
+                "tags": [
+                    "Student Answers"
+                ],
+                "summary": "Получить конкретный ответ студента",
+                "operationId": "826da593da9ce6c169c2f29fd0909e49",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID ответа",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация об ответе"
+                    },
+                    "404": {
+                        "description": "Ответ не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Student Answers"
+                ],
+                "summary": "Обновить ответ студента",
+                "operationId": "f06328d79920d9284fdbdc69da96985d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID ответа",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "is_selected": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ответ обновлён"
+                    },
+                    "404": {
+                        "description": "Ответ не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Student Answers"
+                ],
+                "summary": "Удалить ответ студента",
+                "operationId": "650c862cb27e307a90dacbb8b2f63f69",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID ответа",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Ответ удалён"
+                    },
+                    "404": {
+                        "description": "Ответ не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/student-groups": {
+            "get": {
+                "tags": [
+                    "Student Groups"
+                ],
+                "summary": "Получить список всех студенческих групп",
+                "operationId": "96a6a3183632c48f0fb9051de21d66dc",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Фильтрация по названию группы",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список групп"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Student Groups"
+                ],
+                "summary": "Создать новую студенческую группу",
+                "operationId": "1a7b9a27765f8889f3f2ef094963fdb8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "faculty_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "ИУ7-31Б"
+                                    },
+                                    "faculty_id": {
+                                        "type": "integer",
+                                        "example": 7
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Группа создана"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/student-groups/{id}": {
+            "get": {
+                "tags": [
+                    "Student Groups"
+                ],
+                "summary": "Получить конкретную группу",
+                "operationId": "490230693deb9e50df26b77766549a69",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID группы",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о группе"
+                    },
+                    "404": {
+                        "description": "Группа не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Student Groups"
+                ],
+                "summary": "Обновить группу",
+                "operationId": "524caf88a772886edefaa9b945b947d2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID группы",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "ИУ7-41Б"
+                                    },
+                                    "faculty_id": {
+                                        "type": "integer",
+                                        "example": 7
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Группа обновлена"
+                    },
+                    "404": {
+                        "description": "Группа не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Student Groups"
+                ],
+                "summary": "Удалить группу",
+                "operationId": "491f398ba226d9d84d8531c7f71e1c05",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID группы",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Группа удалена"
+                    },
+                    "404": {
+                        "description": "Группа не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/test-attempts": {
+            "get": {
+                "tags": [
+                    "Test Attempts"
+                ],
+                "summary": "Получить список всех попыток",
+                "operationId": "a662aafc6b556578bd32ce695f5fad87",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "query",
+                        "description": "Фильтрация по ID студента",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "live_test_id",
+                        "in": "query",
+                        "description": "Фильтрация по ID теста",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список попыток"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Test Attempts"
+                ],
+                "summary": "Создать новую попытку",
+                "operationId": "50a298a83358eb149f63ce894bc696e7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "live_test_id",
+                                    "student_id"
+                                ],
+                                "properties": {
+                                    "live_test_id": {
+                                        "type": "integer",
+                                        "example": 11
+                                    },
+                                    "student_id": {
+                                        "type": "integer",
+                                        "example": 42
+                                    },
+                                    "started_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-04-16T09:00:00Z"
+                                    },
+                                    "finished_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-04-16T09:25:00Z"
+                                    },
+                                    "score": {
+                                        "type": "number",
+                                        "example": 87.5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Попытка создана"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/test-attempts/{id}": {
+            "get": {
+                "tags": [
+                    "Test Attempts"
+                ],
+                "summary": "Получить конкретную попытку",
+                "operationId": "1251d5cb08f371ec6d0288c0b4355af0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID попытки",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о попытке"
+                    },
+                    "404": {
+                        "description": "Попытка не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Test Attempts"
+                ],
+                "summary": "Обновить попытку",
+                "operationId": "e8e5d70b448f81de5c7450c4e6db13d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID попытки",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "started_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-04-16T09:05:00Z"
+                                    },
+                                    "finished_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-04-16T09:35:00Z"
+                                    },
+                                    "score": {
+                                        "type": "number",
+                                        "example": 90
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Попытка обновлена"
+                    },
+                    "404": {
+                        "description": "Попытка не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Test Attempts"
+                ],
+                "summary": "Удалить попытку",
+                "operationId": "b23dd0caef90722f6d69799ec9c60b87",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID попытки",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Попытка удалена"
+                    },
+                    "404": {
+                        "description": "Попытка не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/universities": {
+            "get": {
+                "tags": [
+                    "Universities"
+                ],
+                "summary": "Получить список университетов",
+                "operationId": "6eb446358f4ff0a1f91c3e95e8492a0e",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Фильтрация по названию университета",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список университетов"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Universities"
+                ],
+                "summary": "Создать новый университет",
+                "operationId": "9269df063e19bf824bf20c03650d7314",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Московский государственный университет"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Университет создан"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/universities/{id}": {
+            "get": {
+                "tags": [
+                    "Universities"
+                ],
+                "summary": "Получить конкретный университет",
+                "operationId": "c6da101f03bdd336d789a8c42758992f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID университета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация об университете"
+                    },
+                    "404": {
+                        "description": "Университет не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Universities"
+                ],
+                "summary": "Обновить университет",
+                "operationId": "bd0bde70e803a72464fd58d0b2a3aee1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID университета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "СПбГУ"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Университет обновлён"
+                    },
+                    "404": {
+                        "description": "Университет не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Universities"
+                ],
+                "summary": "Удалить университет",
+                "operationId": "f5e004030a54e6d0d7cd40a42fc36b42",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID университета",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Университет удалён"
+                    },
+                    "404": {
+                        "description": "Университет не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Получить список пользователей",
+                "operationId": "9d76a20e6eafa60ab6355d74a2721ddc",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Фильтрация по имени",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список пользователей"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Создать нового пользователя",
+                "operationId": "d66e0bae0dd1f5b58ce3b696077eda33",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Иван Иванов"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "ivan@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "securePassword123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "enum": [
+                                            "admin",
+                                            "teacher",
+                                            "student"
+                                        ],
+                                        "example": "student"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Пользователь создан"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Получить конкретного пользователя",
+                "operationId": "27251d6c7da50ade77efa7a82910a8b1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о пользователе"
+                    },
+                    "404": {
+                        "description": "Пользователь не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Обновить пользователя",
+                "operationId": "368413bb50c54c63fe1bc8e43e80578f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Пётр Петров"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "petr@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "newSecurePassword"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "enum": [
+                                            "admin",
+                                            "teacher",
+                                            "student"
+                                        ],
+                                        "example": "teacher"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Пользователь обновлён"
+                    },
+                    "404": {
+                        "description": "Пользователь не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Удалить пользователя",
+                "operationId": "cf6077108c893a034e427ff3b90f484c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Пользователь удалён"
+                    },
+                    "404": {
+                        "description": "Пользователь не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -336,12 +2088,48 @@
     },
     "tags": [
         {
+            "name": "Answers",
+            "description": "CRUD операции с ответами"
+        },
+        {
             "name": "Auth",
             "description": "Методы для авторизации"
         },
         {
+            "name": "Faculties",
+            "description": "CRUD операции с факультетами"
+        },
+        {
+            "name": "Institutes",
+            "description": "CRUD операции с институтами"
+        },
+        {
             "name": "Live Tests",
             "description": "CRUD операции с тестами"
+        },
+        {
+            "name": "Questions",
+            "description": "CRUD операции с вопросами"
+        },
+        {
+            "name": "Student Answers",
+            "description": "CRUD операции с ответами студентов"
+        },
+        {
+            "name": "Student Groups",
+            "description": "CRUD операции со студенческими группами"
+        },
+        {
+            "name": "Test Attempts",
+            "description": "CRUD операции с попытками прохождения тестов"
+        },
+        {
+            "name": "Universities",
+            "description": "CRUD операции с университетами"
+        },
+        {
+            "name": "Users",
+            "description": "CRUD операции с пользователями"
         }
     ]
 }

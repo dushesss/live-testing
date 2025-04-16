@@ -8,64 +8,78 @@ use App\Http\Requests\AuthRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
+/**
+ * Контроллер авторизации пользователей.
+ */
 class AuthController extends Controller
 {
+    public function __construct(
+        private readonly AuthService $service
+    ) {}
+
     /**
      * Регистрация нового пользователя.
      *
-     * @param AuthRequest $request Запрос с данными пользователя (валидирован заранее)
-     * @param AuthService $authService Сервис авторизации, выполняющий бизнес-логику
-     * @return JsonResponse Ответ с зарегистрированным пользователем
+     * @param AuthRequest $request
+     * @return JsonResponse
      */
-    public function register(AuthRequest $request, AuthService $authService): JsonResponse
+    public function register(AuthRequest $request): JsonResponse
     {
-        $user = $authService->register($request->validated());
-
-        return $this->apiResponse(201, 'success', ['user' => $user]);
+        try {
+            $user = $this->service->register($request->validated());
+            return $this->apiResponse(Response::HTTP_CREATED, 'success', ['user' => $user]);
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
+        }
     }
 
     /**
      * Авторизация пользователя и выдача токена.
      *
-     * @param AuthRequest $request Запрос с логином и паролем
-     * @param AuthService $authService Сервис авторизации
-     * @return JsonResponse Ответ с токеном или ошибкой
+     * @param AuthRequest $request
+     * @return JsonResponse
      */
-    public function login(AuthRequest $request, AuthService $authService): JsonResponse
+    public function login(AuthRequest $request): JsonResponse
     {
-        $credentials = $request->only('login', 'password');
+        try {
+            $credentials = $request->only('login', 'password');
 
-        $tokenData = $authService->login($credentials);
+            $tokenData = $this->service->login($credentials);
 
-        if (!$tokenData) {
-            return $this->apiResponse(422, 'error', 'Неверный логин или пароль');
+            if (!$tokenData) {
+                return $this->apiResponse(Response::HTTP_UNPROCESSABLE_ENTITY, 'error', 'Неверный логин или пароль');
+            }
+
+            return $this->apiResponse(Response::HTTP_OK, 'success', $tokenData);
+        } catch (Throwable $e) {
+            return $this->apiResponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'error', $e->getMessage());
         }
-
-        return $this->apiResponse(200, 'success', $tokenData);
     }
 
     /**
      * Получение данных текущего авторизованного пользователя.
      *
-     * @param Request $request HTTP-запрос с авторизацией
-     * @return JsonResponse Ответ с данными пользователя
+     * @param Request $request
+     * @return JsonResponse
      */
     public function user(Request $request): JsonResponse
     {
-        return $this->apiResponse(200, 'success', $request->user());
+        return $this->apiResponse(Response::HTTP_OK, 'success', $request->user());
     }
 
     /**
      * Выход пользователя и удаление текущего токена.
      *
-     * @param Request $request HTTP-запрос от авторизованного пользователя
-     * @return JsonResponse Ответ об успешном выходе
+     * @param Request $request
+     * @return JsonResponse
      */
     public function logout(Request $request): JsonResponse
     {
         $request->user()?->currentAccessToken()?->delete();
 
-        return $this->apiResponse(200, 'success', 'Выход выполнен успешно');
+        return $this->apiResponse(Response::HTTP_OK, 'success', 'Выход выполнен успешно');
     }
 }
